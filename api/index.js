@@ -14,6 +14,7 @@ app.use(bodyParser.json());
 
 
 
+
 // Database Setup (Turso)
 const db = createClient({
     url: process.env.TURSO_URL || 'file:local.db',
@@ -70,9 +71,15 @@ app.post('/api/history', async (req, res) => {
 });
 
 // Serve React App for any other route
-app.use((req, res) => {
-    res.sendFile(path.join(__dirname, '../dist', 'index.html'));
-});
+// Only listen if running locally (Vercel handles this automatically)
+if (require.main === module) {
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log(`Server running on http://0.0.0.0:${PORT}`);
+    });
+}
+
+module.exports = app;
+
 
 
 // Only listen if running locally (Vercel handles this automatically)

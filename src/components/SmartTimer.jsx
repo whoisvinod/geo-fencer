@@ -62,26 +62,32 @@ const SmartTimer = ({ isInside, activeZoneName, onSaveSession }) => {
             date: new Date().toLocaleDateString('en-GB') // DD/MM/YYYY format roughly
         };
 
-        // Save to backend
         try {
             const response = await fetch('/api/history', {
-
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(sessionData)
             });
+
+            const text = await response.text();
+
             if (response.ok) {
                 alert(`Session Saved! Duration: ${formatTime(elapsedTime)}`);
                 if (onSaveSession) onSaveSession();
             } else {
-                const errData = await response.json();
-                alert(`Failed to save session: ${errData.error || response.statusText}`);
+                try {
+                    const errData = JSON.parse(text);
+                    alert(`Failed to save session: ${errData.error || response.statusText}`);
+                } catch (e) {
+                    alert(`Error ${response.status}: ${response.statusText}\n${text.substring(0, 100)}`);
+                }
             }
 
         } catch (error) {
             console.error("Error saving session:", error);
-            alert("Error saving session (Backend might be offline).");
+            alert(`Network Error: ${error.message}`);
         }
+
 
         setElapsedTime(0);
         setStartTime(null);
