@@ -93,7 +93,8 @@ app.post('/api/history', async (req, res) => {
         res.json({
             "message": "success",
             "data": req.body,
-            "id": result.lastInsertRowid
+            "id": result.lastInsertRowid.toString()
+
         });
     } catch (err) {
         res.status(500).json({ "error": err.message });
