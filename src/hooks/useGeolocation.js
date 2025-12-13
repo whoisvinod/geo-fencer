@@ -11,9 +11,10 @@ const useGeolocation = () => {
         }
 
         const handleSuccess = (position) => {
-            const { latitude, longitude } = position.coords;
-            setLocation([latitude, longitude]);
+            const { latitude, longitude, accuracy } = position.coords;
+            setLocation({ lat: latitude, lng: longitude, accuracy });
         };
+
 
         const handleError = (error) => {
             setError(error.message);
