@@ -14,13 +14,20 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Database Setup (Turso)
+if (!process.env.TURSO_URL) {
+    console.error("CRITICAL: TURSO_URL is missing in environment variables!");
+    // We don't throw here to allow the /api/health route to work, but DB calls will fail.
+}
+
 const db = createClient({
-    url: process.env.TURSO_URL || 'file:local.db',
+    url: process.env.TURSO_URL || 'libsql://unknown-db.turso.io', // Prevent file: protocol crash
     authToken: process.env.TURSO_TOKEN,
 });
 
+
 // Initialize DB
 (async () => {
+    if (!process.env.TURSO_URL) return;
     try {
         await db.execute(`
             CREATE TABLE IF NOT EXISTS history (
@@ -39,6 +46,16 @@ const db = createClient({
 })();
 
 // API Routes
+app.get('/api/health', (req, res) => {
+    res.json({
+        status: 'ok',
+        env: {
+            hasUrl: !!process.env.TURSO_URL,
+            hasToken: !!process.env.TURSO_TOKEN
+        }
+    });
+});
+
 app.get('/api/history', async (req, res) => {
     try {
         const result = await db.execute("SELECT * FROM history ORDER BY id DESC");
