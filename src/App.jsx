@@ -121,36 +121,42 @@ function App() {
         </div>
       </header>
 
-      <main className="flex-grow relative">
+      <main className="flex-grow flex flex-col md:block relative overflow-hidden">
         {showHistory && <HistoryScreen onClose={() => setShowHistory(false)} />}
 
-        <ZoneManager
-          zones={zones}
-          activeZoneId={activeZoneId}
-          onZoneAdd={handleAddZone}
-          onZoneSelect={setActiveZoneId}
-          onZoneRename={handleRenameZone}
-          onZoneDelete={handleDeleteZone}
-        />
+        {/* Zone Manager: Relative on Mobile, Absolute on Desktop */}
+        <div className="relative z-20 md:absolute md:top-0 md:left-0 md:w-full md:h-0">
+          <ZoneManager
+            zones={zones}
+            activeZoneId={activeZoneId}
+            onZoneAdd={handleAddZone}
+            onZoneSelect={setActiveZoneId}
+            onZoneRename={handleRenameZone}
+            onZoneDelete={handleDeleteZone}
+          />
+        </div>
 
-        <MapView
-          key={activeZoneId} // Force remount when switching zones to clear/redraw
-          onGeofenceChange={handleUpdateZonePolygon}
-          userLocation={activeLocation}
-          onLocationManualChange={setManualLocation}
-          isTestMode={isTestMode}
-          initialPolygon={activeZone?.polygon}
-        />
+        {/* Map: Flex-grow on Mobile, Full height on Desktop */}
+        <div className="flex-grow w-full h-[50vh] md:h-full relative z-10">
+          <MapView
+            key={activeZoneId}
+            onGeofenceChange={handleUpdateZonePolygon}
+            userLocation={activeLocation}
+            onLocationManualChange={setManualLocation}
+            isTestMode={isTestMode}
+            initialPolygon={activeZone?.polygon}
+          />
+        </div>
 
+        {/* Error Message */}
         {locationError && (
-          <div className="absolute bottom-20 left-4 right-4 md:bottom-4 md:left-4 md:right-auto bg-red-500/90 p-3 rounded text-sm md:max-w-xs z-[1000]">
-
+          <div className="relative md:absolute bottom-0 left-0 right-0 md:bottom-4 md:left-4 md:right-auto bg-red-500/90 p-3 text-sm md:max-w-xs z-[1000] text-center md:text-left md:rounded">
             Error: {locationError}
           </div>
         )}
 
-        <div className="absolute bottom-4 left-4 right-4 md:left-auto md:right-4 md:bottom-8 bg-gray-800/90 p-4 rounded shadow-lg z-[1000] md:max-w-xs flex flex-col gap-4">
-
+        {/* Timer/Instructions: Relative on Mobile, Absolute on Desktop */}
+        <div className="relative z-20 bg-gray-800 p-4 md:absolute md:bottom-8 md:right-4 md:bg-gray-800/90 md:rounded md:shadow-lg md:max-w-xs flex flex-col gap-4">
 
           {/* Timer Section */}
           <SmartTimer
@@ -158,7 +164,7 @@ function App() {
             activeZoneName={activeZone?.name}
           />
 
-          <div>
+          <div className="hidden md:block"> {/* Hide instructions on mobile to save space? Or keep them? Let's keep them but maybe collapsible. For now, standard block. */}
             <h3 className="font-bold mb-2">Instructions</h3>
             <ul className="text-sm space-y-1 text-gray-300">
               <li>1. Create or Select a <b>Safe Zone</b>.</li>
@@ -182,6 +188,7 @@ function App() {
         </div>
 
       </main >
+
     </div >
   );
 }

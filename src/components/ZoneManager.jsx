@@ -21,7 +21,8 @@ const ZoneManager = ({ zones, activeZoneId, onZoneAdd, onZoneSelect, onZoneRenam
     };
 
     return (
-        <div className="absolute top-[80px] left-4 right-4 md:top-4 md:left-16 md:right-auto bg-gray-800/90 p-4 rounded shadow-lg z-[1000] md:w-64 text-white">
+        <div className="w-full bg-gray-800 p-4 md:absolute md:top-4 md:left-16 md:w-64 md:rounded md:shadow-lg md:bg-gray-800/90 text-white">
+
 
             <h3 className="font-bold mb-2 text-blue-400">Safe Zones</h3>
 
