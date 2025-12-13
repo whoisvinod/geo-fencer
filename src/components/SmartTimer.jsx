@@ -74,8 +74,10 @@ const SmartTimer = ({ isInside, activeZoneName, onSaveSession }) => {
                 alert(`Session Saved! Duration: ${formatTime(elapsedTime)}`);
                 if (onSaveSession) onSaveSession();
             } else {
-                alert("Failed to save session.");
+                const errData = await response.json();
+                alert(`Failed to save session: ${errData.error || response.statusText}`);
             }
+
         } catch (error) {
             console.error("Error saving session:", error);
             alert("Error saving session (Backend might be offline).");
