@@ -1,9 +1,10 @@
-const express = require('express');
-const { createClient } = require('@libsql/client');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const path = require('path');
-require('dotenv').config();
+import express from 'express';
+import { createClient } from '@libsql/client';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,9 +12,6 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
-
-
-
 
 // Database Setup (Turso)
 const db = createClient({
@@ -70,15 +68,15 @@ app.post('/api/history', async (req, res) => {
     }
 });
 
-// Serve React App for any other route
-// Only listen if running locally (Vercel handles this automatically)
-if (require.main === module) {
+// Only listen if running locally
+if (process.env.NODE_ENV !== 'production') {
     app.listen(PORT, '0.0.0.0', () => {
         console.log(`Server running on http://0.0.0.0:${PORT}`);
     });
 }
 
-module.exports = app;
+export default app;
+
 
 
 
