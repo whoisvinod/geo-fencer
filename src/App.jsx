@@ -121,11 +121,11 @@ function App() {
         </div>
       </header>
 
-      <main className="flex-grow flex flex-col md:block relative overflow-hidden">
+      <main className="flex-grow flex flex-col md:block relative overflow-y-auto md:overflow-hidden">
         {showHistory && <HistoryScreen onClose={() => setShowHistory(false)} />}
 
         {/* Zone Manager: Relative on Mobile, Absolute on Desktop */}
-        <div className="relative z-20 md:absolute md:top-0 md:left-0 md:w-full md:h-0">
+        <div className="relative z-20 md:absolute md:top-0 md:left-0 md:w-full md:h-0 p-4 md:p-0">
           <ZoneManager
             zones={zones}
             activeZoneId={activeZoneId}
@@ -136,8 +136,9 @@ function App() {
           />
         </div>
 
-        {/* Map: Flex-grow on Mobile, Full height on Desktop */}
-        <div className="flex-grow w-full h-[50vh] md:h-full relative z-10">
+
+        {/* Map: Fixed height on Mobile (to ensure visibility), Full height on Desktop */}
+        <div className="w-full h-[400px] md:h-full relative z-10 flex-shrink-0">
           <MapView
             key={activeZoneId}
             onGeofenceChange={handleUpdateZonePolygon}
@@ -164,7 +165,7 @@ function App() {
             activeZoneName={activeZone?.name}
           />
 
-          <div className="hidden md:block"> {/* Hide instructions on mobile to save space? Or keep them? Let's keep them but maybe collapsible. For now, standard block. */}
+          <div className="block"> {/* Show instructions on mobile */}
             <h3 className="font-bold mb-2">Instructions</h3>
             <ul className="text-sm space-y-1 text-gray-300">
               <li>1. Create or Select a <b>Safe Zone</b>.</li>
@@ -174,6 +175,7 @@ function App() {
               <li>5. Press <b>'F'</b> to focus map on your location.</li>
             </ul>
           </div>
+
 
           {activeLocation && (
             <div className="mt-2 text-xs text-gray-400">
