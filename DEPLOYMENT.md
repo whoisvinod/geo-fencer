@@ -1,36 +1,35 @@
-# Deployment Guide for GeoFencer
+# Deployment Guide for GeoFencer (Vercel + Turso)
 
-## Option 1: Replit (Best "No Credit Card" Option)
-**Best for:** Persistent Database + No Credit Card.
-**Pros:** Your `history.db` will be saved!
-**Cons:** App sleeps when inactive.
+## Prerequisites
+-   **GitHub Account**: To host the code.
+-   **Vercel Account**: To host the app (Free).
+-   **Turso Account**: To host the database (Free).
 
-1.  **Create Account**: Go to [replit.com](https://replit.com/) and sign up.
-2.  **Create Repl**:
-    -   Click **+ Create Repl**.
-    -   Choose **Import from GitHub**.
-    -   Paste your repository URL.
-3.  **Run**:
-    -   Replit will detect `package.json`.
-    -   Click **Run**.
-    -   It will install dependencies and start the server.
-4.  **Done**: You will see a web view with your app URL.
+## Step 1: Push to GitHub
+1.  Open your terminal.
+2.  Run these commands to push your latest changes (including the Turso setup):
+    ```bash
+    git add .
+    git commit -m "Setup Turso and Vercel"
+    git push
+    ```
 
----
+## Step 2: Deploy to Vercel
+1.  Go to [vercel.com](https://vercel.com/) and log in with GitHub.
+2.  Click **Add New...** -> **Project**.
+3.  Import your `geo-fencer` repository.
+4.  **IMPORTANT: Configure Environment Variables**:
+    -   Expand the **Environment Variables** section.
+    -   Add the following (copy from your Turso dashboard or the chat):
+        -   **Key**: `TURSO_URL` | **Value**: `libsql://geo-fencer-data-db-vinodakula.aws-ap-south-1.turso.io`
+        -   **Key**: `TURSO_TOKEN` | **Value**: `(Your long token starting with ey...)`
+5.  Click **Deploy**.
 
-## Option 2: Vercel (Requires Database Change)
-**Best for:** Professional, fast, free.
-**Pros:** Never sleeps, scales well.
-**Cons:** **Cannot use SQLite file**. You MUST switch to a cloud database (like Turso or Neon).
+## Step 3: Verify
+-   Vercel will build your app and give you a URL (e.g., `https://geo-fencer.vercel.app`).
+-   Open it, create a zone, and start the timer.
+-   Check the "History" tab. It should load data from Turso!
 
-1.  **Refactor**: We would need to change `server.cjs` to use a cloud DB connection string instead of a local file.
-2.  **Deploy**: Connect GitHub repo to Vercel.
-
----
-
-## Option 3: Local Tunnel (ngrok)
-**Best for:** Hosting from your own computer.
-**Pros:** You control the data.
-**Cons:** Computer must stay on.
-
-1.  Run `ngrok http 3000`.
+## Troubleshooting
+-   **Database Error?** Check if you added the Environment Variables correctly in Vercel Settings.
+-   **Blank Screen?** Check the Vercel "Logs" tab for build errors.

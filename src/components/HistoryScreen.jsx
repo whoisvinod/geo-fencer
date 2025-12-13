@@ -11,7 +11,8 @@ const HistoryScreen = ({ onClose }) => {
     });
 
     useEffect(() => {
-        fetch('http://localhost:3000/api/history')
+        fetch('/api/history')
+
             .then(res => res.json())
             .then(data => {
                 if (data.data) {
