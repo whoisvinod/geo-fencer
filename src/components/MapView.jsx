@@ -186,8 +186,10 @@ const MapView = ({ onGeofenceChange, userLocation, onLocationManualChange, isTes
         <MapContainer
             center={userLocation || [51.505, -0.09]}
             zoom={13}
+            maxZoom={22}
             style={{ height: '100%', width: '100%' }}
         >
+
             <MapEvents isTestMode={isTestMode} onLocationManualChange={onLocationManualChange} />
             <FocusHandler userLocation={userLocation} />
             <RecenterAutomatically location={userLocation} />
@@ -199,7 +201,10 @@ const MapView = ({ onGeofenceChange, userLocation, onLocationManualChange, isTes
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                maxNativeZoom={19}
+                maxZoom={22}
             />
+
             <FeatureGroup ref={featureGroupRef}>
                 <EditControl
                     position="topright"
