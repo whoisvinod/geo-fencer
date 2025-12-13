@@ -87,7 +87,8 @@ function App() {
 
   return (
     <div className="h-screen w-screen flex flex-col bg-gray-900 text-white">
-      <header className="p-4 bg-gray-800 shadow-md z-10 flex justify-between items-center gap-4">
+      <header className="p-4 bg-gray-800 shadow-md z-10 flex flex-col md:flex-row justify-between items-center gap-4">
+
         <h1 className="text-xl font-bold text-blue-400">GeoFencer</h1>
 
         <div className="flex items-center gap-4">
@@ -142,12 +143,14 @@ function App() {
         />
 
         {locationError && (
-          <div className="absolute bottom-4 left-4 bg-red-500/90 p-3 rounded text-sm max-w-xs z-[1000]">
+          <div className="absolute bottom-20 left-4 right-4 md:bottom-4 md:left-4 md:right-auto bg-red-500/90 p-3 rounded text-sm md:max-w-xs z-[1000]">
+
             Error: {locationError}
           </div>
         )}
 
-        <div className="absolute bottom-8 right-4 bg-gray-800/90 p-4 rounded shadow-lg z-[1000] max-w-xs flex flex-col gap-4">
+        <div className="absolute bottom-4 left-4 right-4 md:left-auto md:right-4 md:bottom-8 bg-gray-800/90 p-4 rounded shadow-lg z-[1000] md:max-w-xs flex flex-col gap-4">
+
 
           {/* Timer Section */}
           <SmartTimer
