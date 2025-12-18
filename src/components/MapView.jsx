@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { MapContainer, TileLayer, FeatureGroup, Marker, useMapEvents, useMap, Circle } from 'react-leaflet';
+import { MapContainer, TileLayer, FeatureGroup, Marker, useMapEvents, useMap, Circle, CircleMarker } from 'react-leaflet';
+
 
 import { EditControl } from 'react-leaflet-draw';
 import 'leaflet/dist/leaflet.css';
@@ -215,7 +216,7 @@ const MapView = ({ onGeofenceChange, userLocation, onLocationManualChange, isTes
             </FeatureGroup>
             {userLocation && (
                 <>
-                    <Marker position={userLocation} />
+                    {/* Accuracy Circle */}
                     {accuracy && (
                         <Circle
                             center={userLocation}
@@ -224,12 +225,25 @@ const MapView = ({ onGeofenceChange, userLocation, onLocationManualChange, isTes
                                 fillColor: '#3b82f6',
                                 fillOpacity: 0.1,
                                 color: '#3b82f6',
-                                weight: 1
+                                weight: 1,
+                                dashArray: '5, 5'
                             }}
                         />
                     )}
+                    {/* User Location Dot */}
+                    <CircleMarker
+                        center={userLocation}
+                        radius={8}
+                        pathOptions={{
+                            fillColor: '#3b82f6',
+                            fillOpacity: 1,
+                            color: 'white',
+                            weight: 2
+                        }}
+                    />
                 </>
             )}
+
 
         </MapContainer>
     );

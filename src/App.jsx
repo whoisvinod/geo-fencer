@@ -198,8 +198,9 @@ function App() {
 
         {/* Version Number */}
         <div className="absolute bottom-2 left-2 text-[10px] text-gray-500 z-[1001] pointer-events-none">
-          v1.0.1
+          v1.0.2
         </div>
+
 
       </main >
 
