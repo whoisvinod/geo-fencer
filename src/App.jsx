@@ -56,12 +56,39 @@ function App() {
     }
   }, [activeLocation, activeZone]);
 
-  // ... (handlers remain same)
+  // Zone Handlers
+  const handleAddZone = () => {
+    const newZone = {
+      id: crypto.randomUUID(),
+      name: `Safe Zone ${zones.length}`,
+      polygon: null
+    };
+    setZones([...zones, newZone]);
+    setActiveZoneId(newZone.id);
+  };
+
+  const handleUpdateZonePolygon = (polygon) => {
+    if (!activeZoneId) return;
+    setZones(zones.map(z =>
+      z.id === activeZoneId ? { ...z, polygon } : z
+    ));
+  };
+
+  const handleRenameZone = (id, newName) => {
+    setZones(zones.map(z =>
+      z.id === id ? { ...z, name: newName } : z
+    ));
+  };
+
+  const handleDeleteZone = (id) => {
+    setZones(zones.filter(z => z.id !== id));
+    if (activeZoneId === id) setActiveZoneId(null);
+  };
 
   return (
     <div className="h-screen w-screen flex flex-col bg-gray-900 text-white">
-      {/* ... (Header remains same) */}
       <header className="p-4 bg-gray-800 shadow-md z-10 flex flex-col md:flex-row justify-between items-center gap-4">
+
         <h1 className="text-xl font-bold text-blue-400">GeoFencer</h1>
 
         <div className="flex items-center gap-4">
