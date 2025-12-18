@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { MapContainer, TileLayer, FeatureGroup, Marker, useMapEvents, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, FeatureGroup, Marker, useMapEvents, useMap, Circle } from 'react-leaflet';
+
 import { EditControl } from 'react-leaflet-draw';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
@@ -125,21 +126,15 @@ const FitBoundsToPolygon = ({ polygon }) => {
 };
 
 
-const MapView = ({ onGeofenceChange, userLocation, onLocationManualChange, isTestMode, initialPolygon }) => {
+const MapView = ({ onGeofenceChange, userLocation, onLocationManualChange, isTestMode, initialPolygon, accuracy }) => {
     const featureGroupRef = React.useRef();
-
     React.useEffect(() => {
+
         if (initialPolygon && featureGroupRef.current) {
             const group = featureGroupRef.current;
             group.clearLayers();
 
-            // initialPolygon is [[lng, lat], ...] from Turf (which uses lng,lat)
-            // Leaflet expects [lat, lng]
-            // Wait, in _onCreated we did: latlngs.map(ll => [ll.lng, ll.lat]) -> stored as [lng, lat]
-            // So we need to flip it back for Leaflet: [lat, lng]
-
             const leafletCoords = initialPolygon.map(coord => [coord[1], coord[0]]);
-            // Remove the last closing point if it's the same as first (Turf adds it)
             if (leafletCoords.length > 0 &&
                 leafletCoords[0][0] === leafletCoords[leafletCoords.length - 1][0] &&
                 leafletCoords[0][1] === leafletCoords[leafletCoords.length - 1][1]) {
@@ -157,18 +152,14 @@ const MapView = ({ onGeofenceChange, userLocation, onLocationManualChange, isTes
         const { layerType, layer } = e;
         if (layerType === 'polygon') {
             const latlngs = layer.getLatLngs()[0];
-            // Convert to [lng, lat] for Turf
             const coordinates = latlngs.map(ll => [ll.lng, ll.lat]);
-            // Close the loop
             coordinates.push(coordinates[0]);
-
             onGeofenceChange(coordinates);
         }
     };
 
     const _onEdited = (e) => {
         e.layers.eachLayer(layer => {
-            // Check if has latlngs (Polygon/Rectangle)
             if (layer.getLatLngs) {
                 const latlngs = layer.getLatLngs()[0];
                 const coordinates = latlngs.map(ll => [ll.lng, ll.lat]);
@@ -181,6 +172,7 @@ const MapView = ({ onGeofenceChange, userLocation, onLocationManualChange, isTes
     const _onDeleted = (e) => {
         onGeofenceChange(null);
     };
+
 
     return (
         <MapContainer
@@ -222,13 +214,27 @@ const MapView = ({ onGeofenceChange, userLocation, onLocationManualChange, isTes
                 />
             </FeatureGroup>
             {userLocation && (
-                <Marker position={userLocation}>
-                </Marker>
+                <>
+                    <Marker position={userLocation} />
+                    {accuracy && (
+                        <Circle
+                            center={userLocation}
+                            radius={accuracy}
+                            pathOptions={{
+                                fillColor: '#3b82f6',
+                                fillOpacity: 0.1,
+                                color: '#3b82f6',
+                                weight: 1
+                            }}
+                        />
+                    )}
+                </>
             )}
 
         </MapContainer>
     );
 };
+
 
 
 export default MapView;

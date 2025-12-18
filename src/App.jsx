@@ -146,7 +146,9 @@ function App() {
             onLocationManualChange={setManualLocation}
             isTestMode={isTestMode}
             initialPolygon={activeZone?.polygon}
+            accuracy={activeLocation?.accuracy}
           />
+
         </div>
 
         {/* Error Message */}
