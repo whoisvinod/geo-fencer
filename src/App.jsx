@@ -181,13 +181,14 @@ function App() {
 
           {activeLocation && typeof activeLocation.lat === 'number' && (
             <div className="mt-2 text-xs text-gray-400">
-              Lat: {activeLocation.lat.toFixed(4)}, Lng: {activeLocation.lng?.toFixed(4)}
+              Lat: {activeLocation.lat.toFixed(6)}, Lng: {activeLocation.lng?.toFixed(6)}
               <br />
               <span className={(activeLocation.accuracy || 0) > 50 ? "text-red-400" : "text-green-400"}>
                 Accuracy: +/- {Math.round(activeLocation.accuracy || 0)}m
               </span>
             </div>
           )}
+
 
           {activeLocation && (
             <div className="mt-1 text-[10px] text-gray-500 uppercase font-bold">
@@ -198,8 +199,9 @@ function App() {
 
         {/* Version Number */}
         <div className="absolute bottom-2 left-2 text-[10px] text-gray-500 z-[1001] pointer-events-none">
-          v1.0.2
+          v1.0.3
         </div>
+
 
 
       </main >

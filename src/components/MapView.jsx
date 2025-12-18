@@ -35,6 +35,18 @@ const RecenterAutomatically = ({ location }) => {
     return null;
 };
 
+const InvalidateSize = () => {
+    const map = useMap();
+    React.useEffect(() => {
+        const timer = setTimeout(() => {
+            map.invalidateSize();
+        }, 200);
+        return () => clearTimeout(timer);
+    }, [map]);
+    return null;
+};
+
+
 const FocusHandler = ({ userLocation }) => {
     const map = useMapEvents({
         keydown(e) {
@@ -186,8 +198,10 @@ const MapView = ({ onGeofenceChange, userLocation, onLocationManualChange, isTes
             <MapEvents isTestMode={isTestMode} onLocationManualChange={onLocationManualChange} />
             <FocusHandler userLocation={userLocation} />
             <RecenterAutomatically location={userLocation} />
+            <InvalidateSize />
             <FitBoundsToPolygon polygon={initialPolygon} />
             <LocateControl userLocation={userLocation} />
+
 
 
 
